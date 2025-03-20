@@ -1,7 +1,92 @@
 # 202130230 지영준. 
 ### 3월 13일 강의내용  
-# React.js 기능 설명 README
-# React.js 기능 설명 README
+
+# VS Code에서 React 설치 및 Git 연동 가이드
+
+## 1. VS Code에서 React 개발 환경 설정하기
+
+### 1.1 VS Code 설치
+React 개발을 위해 **Visual Studio Code(VS Code)**를 설치해야 합니다. 아래 링크에서 다운로드 후 설치를 진행하세요.
+- [VS Code 다운로드](https://code.visualstudio.com/)
+
+설치가 완료되면 VS Code를 실행합니다.
+
+### 1.2 Node.js 및 npm 설치
+React는 **Node.js** 환경에서 실행되므로, 최신 버전의 Node.js를 설치해야 합니다.
+- [Node.js 다운로드](https://nodejs.org/)
+
+설치 후 터미널을 열어 버전을 확인합니다:
+```sh
+node -v  # Node.js 버전 확인
+npm -v   # npm 버전 확인
+```
+
+### 1.3 Create React App으로 React 프로젝트 생성
+
+Create React App(CRA)을 사용하면 손쉽게 React 프로젝트를 만들 수 있습니다.
+
+터미널에서 원하는 디렉토리로 이동 후 아래 명령어 실행:
+```sh
+npx create-react-app my-app
+cd my-app
+npm start
+```
+위 명령어를 실행하면 `http://localhost:3000`에서 React 애플리케이션이 실행됩니다.
+
+## 2. Git을 사용하여 프로젝트 관리하기
+
+### 2.1 Git 설치
+Git이 설치되지 않았다면 아래 사이트에서 다운로드 후 설치하세요.
+- [Git 다운로드](https://git-scm.com/)
+
+설치 후 버전 확인:
+```sh
+git --version
+```
+
+### 2.2 Git 초기화 및 GitHub 연동
+
+#### 1) Git 초기화
+프로젝트 폴더에서 Git을 초기화합니다:
+```sh
+git init
+```
+
+#### 2) `.gitignore` 파일 생성
+React 프로젝트에서 불필요한 파일을 Git에 포함하지 않도록 `.gitignore` 파일을 추가해야 합니다.
+기본적으로 `create-react-app`은 자동으로 `.gitignore` 파일을 생성합니다.
+
+#### 3) GitHub 저장소 생성 및 연결
+GitHub에 접속하여 새 저장소(repository)를 생성한 후, 터미널에서 다음 명령어를 실행하여 연결합니다.
+```sh
+git remote add origin https://github.com/사용자이름/저장소이름.git
+```
+
+#### 4) 프로젝트 커밋 및 푸시
+```sh
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git push -u origin main
+```
+위 명령어를 실행하면 프로젝트가 GitHub에 업로드됩니다.
+
+### 2.3 Git에서 변경 사항 반영
+#### 1) 변경 사항 확인
+```sh
+git status
+```
+#### 2) 변경 사항 커밋 및 푸시
+```sh
+git add .
+git commit -m "Updated project"
+git push origin main
+```
+
+## 3. 결론
+이제 VS Code에서 React 프로젝트를 생성하고, GitHub와 연동하여 관리할 수 있습니다. 이를 활용하여 체계적으로 React 애플리케이션을 개발하세요!
+
+### 3월 20일 강의내용
 
 ## 개요
 React.js는 Facebook에서 개발한 오픈 소스 자바스크립트 라이브러리로, 사용자 인터페이스(UI)를 구축하는 데 사용됩니다. React는 빠르고 유연하며 확장성이 뛰어난 라이브러리로, 컴포넌트 기반 아키텍처를 통해 재사용성이 높은 코드를 작성할 수 있습니다.
@@ -136,5 +221,5 @@ React는 컴포넌트 기반 아키텍처와 가상 DOM을 활용하여 성능�
 React는 배우기 쉽고 다양한 생태계를 갖춘 라이브러리로, 웹 애플리케이션 개발에서 필수적인 도구로 자리 잡았습니다. React를 효과적으로 활용하면 대규모 애플리케이션도 쉽게 관리하고 유지보수할 수 있습니다.
 
 
-### 3월 20일 강의내용
+
 
