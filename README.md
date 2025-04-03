@@ -1,90 +1,168 @@
 # 202130230 지영준. 
-### 3월 13일 강의내용  
 
-# VS Code에서 React 설치 및 Git 연동 가이드
+### 4월 3일 강의내용
 
-## 1. VS Code에서 React 개발 환경 설정하기
 
-### 1.1 VS Code 설치
-React 개발을 위해 **Visual Studio Code(VS Code)**를 설치해야 합니다. 아래 링크에서 다운로드 후 설치를 진행하세요.
-- [VS Code 다운로드](https://code.visualstudio.com/)
+### 3월 27일 강의내용
+## 개요
 
-설치가 완료되면 VS Code를 실행합니다.
+React.js는 Facebook에서 개발한 오픈 소스 자바스크립트 라이브러리로, 사용자 인터페이스(UI)를 구축하는 데 사용됩니다. React는 빠르고 유연하며 확장성이 뛰어난 라이브러리로, 컴포넌트 기반 아키텍처를 통해 재사용성이 높은 코드를 작성할 수 있습니다.
 
-### 1.2 Node.js 및 npm 설치
-React는 **Node.js** 환경에서 실행되므로, 최신 버전의 Node.js를 설치해야 합니다.
-- [Node.js 다운로드](https://nodejs.org/)
+React는 다음과 같은 특징을 가집니다:
 
-설치 후 터미널을 열어 버전을 확인합니다:
-```sh
-node -v  # Node.js 버전 확인
-npm -v   # npm 버전 확인
+컴포넌트 기반 아키텍처: UI를 독립적이고 재사용 가능한 컴포넌트로 분리하여 관리합니다.
+
+가상 DOM (Virtual DOM): 실제 DOM을 직접 조작하는 대신, 가상 DOM을 사용하여 성능을 최적화합니다.
+
+단방향 데이터 흐름 (One-Way Data Flow): 데이터가 부모에서 자식으로 흐르도록 설계되어 관리가 용이합니다.
+
+JSX (JavaScript XML): HTML과 유사한 문법을 통해 UI를 선언적으로 작성할 수 있습니다.
+
+상태 관리 (State Management): 상태(state)를 통해 UI를 동적으로 업데이트할 수 있습니다.
+
+React Hooks 지원: 함수형 컴포넌트에서 상태와 라이프사이클을 관리할 수 있도록 지원합니다.
+
+라우팅 및 데이터 페칭: React Router, Fetch API, Axios, SWR 등을 활용한 네트워크 요청이 가능함.
+
+성능 최적화 기능: 코드 스플리팅(Code Splitting), 지연 로딩(Lazy Loading) 등의 최적화 기법이 존재함.
+
+## 주요 기능
+
+1.컴포넌트 생성 및 중첩 방법
+
+React에서는 **컴포넌트(Component)**를 사용하여 UI를 구성합니다. 컴포넌트는 다른 컴포넌트를 포함할 수 있으며, 이를 통해 계층적인 구조를 만들 수 있습니다.
+
+예제 (컴포넌트 생성 및 중첩)
+```jsx
+function Header() {
+  return <h1>Welcome to My Website</h1>;
+}
+
+function Main() {
+  return (
+    <div>
+      <Header />
+      <p>This is the main content of the website.</p>
+    </div>
+  );
+}
 ```
+2.마크업과 스타일 추가 방법
 
-### 1.3 Create React App으로 React 프로젝트 생성
+JSX를 사용하여 HTML과 유사한 문법으로 마크업을 작성할 수 있으며, 인라인 스타일, CSS 파일, CSS 모듈, Styled Components 등을 활용하여 스타일을 적용할 수 있습니다.
 
-Create React App(CRA)을 사용하면 손쉽게 React 프로젝트를 만들 수 있습니다.
-
-터미널에서 원하는 디렉토리로 이동 후 아래 명령어 실행:
-```sh
-npx create-react-app my-app
-cd my-app
-npm start
+예제 (인라인 스타일 적용)
+```jsx
+function StyledComponent() {
+  const style = {
+    color: "blue",
+    fontSize: "20px",
+  };
+  return <p style={style}>This text is styled with inline styles.</p>;
+}
 ```
-위 명령어를 실행하면 `http://localhost:3000`에서 React 애플리케이션이 실행됩니다.
+예제 (CSS 파일 적용)
+```jsx
+/* styles.css */
+.text {
+  color: red;
+  font-size: 18px;
+}
 
-## 2. Git을 사용하여 프로젝트 관리하기
+import "./styles.css";
 
-### 2.1 Git 설치
-Git이 설치되지 않았다면 아래 사이트에서 다운로드 후 설치하세요.
-- [Git 다운로드](https://git-scm.com/)
-
-설치 후 버전 확인:
-```sh
-git --version
+function StyledComponent() {
+  return <p className="text">This text is styled with CSS.</p>;
+}
 ```
+3.데이터를 표시하는 방법
 
-### 2.2 Git 초기화 및 GitHub 연동
+React에서 데이터를 표시하는 가장 기본적인 방법은 props와 state를 활용하는 것입니다.
 
-#### 1) Git 초기화
-프로젝트 폴더에서 Git을 초기화합니다:
-```sh
-git init
+예제 (props를 사용한 데이터 표시)
+```jsx
+function Greeting(props) {
+  return <h1>Hello, {props.name}!</h1>;
+}
+
+function App() {
+  return <Greeting name="Alice" />;
+}
 ```
+4.조건부 렌더링과 목록 렌더링 방법
 
-#### 2) `.gitignore` 파일 생성
-React 프로젝트에서 불필요한 파일을 Git에 포함하지 않도록 `.gitignore` 파일을 추가해야 합니다.
-기본적으로 `create-react-app`은 자동으로 `.gitignore` 파일을 생성합니다.
-
-#### 3) GitHub 저장소 생성 및 연결
-GitHub에 접속하여 새 저장소(repository)를 생성한 후, 터미널에서 다음 명령어를 실행하여 연결합니다.
-```sh
-git remote add origin https://github.com/사용자이름/저장소이름.git
+조건부 렌더링 (if문 및 삼항 연산자 사용)
+```jsx
+function UserStatus({ isLoggedIn }) {
+  return isLoggedIn ? <p>Welcome back!</p> : <p>Please sign in.</p>;
+}
 ```
-
-#### 4) 프로젝트 커밋 및 푸시
-```sh
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git push -u origin main
+목록 렌더링 (map 함수 사용)
+```jsx
+function ItemList({ items }) {
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  );
+}
 ```
-위 명령어를 실행하면 프로젝트가 GitHub에 업로드됩니다.
+5.이벤트에 응답하고 화면을 업데이트하는 방법
 
-### 2.3 Git에서 변경 사항 반영
-#### 1) 변경 사항 확인
-```sh
-git status
-```
-#### 2) 변경 사항 커밋 및 푸시
-```sh
-git add .
-git commit -m "Updated project"
-git push origin main
-```
+React에서는 onClick, onChange 등의 이벤트 핸들러를 통해 사용자 입력을 처리할 수 있습니다.
 
-## 3. 결론
-이제 VS Code에서 React 프로젝트를 생성하고, GitHub와 연동하여 관리할 수 있습니다. 이를 활용하여 체계적으로 React 애플리케이션을 개발하세요!
+예제 (버튼 클릭 이벤트 처리)
+```jsx
+function ClickCounter() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increase</button>
+    </div>
+  );
+}
+```
+6. 컴포넌트 간에 데이터를 공유하는 방법
+
+React에서는 props, Context API, Redux, Recoil 등을 사용하여 컴포넌트 간 데이터를 공유할 수 있습니다.
+
+예제 (props를 사용한 데이터 전달)
+```jsx
+function Child({ message }) {
+  return <p>{message}</p>;
+}
+
+function Parent() {
+  return <Child message="Hello from Parent!" />;
+}
+```
+예제 (Context API를 사용한 데이터 공유)
+```jsx
+const ThemeContext = React.createContext("light");
+
+function ThemedComponent() {
+  const theme = React.useContext(ThemeContext);
+  return <p>The current theme is {theme}.</p>;
+}
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <ThemedComponent />
+    </ThemeContext.Provider>
+  );
+}
+```
+결론
+
+React는 컴포넌트 기반 아키텍처와 가상 DOM을 활용하여 성능과 유지보수성을 높인 강력한 프론트엔드 라이브러리입니다. 상태 관리, 훅, 컨텍스트 API, React Router 등의 기능을 활용하여 효율적인 애플리케이션을 개발할 수 있습니다.
+
+React는 배우기 쉽고 다양한 생태계를 갖춘 라이브러리로, 웹 애플리케이션 개발에서 필수적인 도구로 자리 잡았습니다. React를 효과적으로 활용하면 대규모 애플리케이션도 쉽게 관리하고 유지보수할 수 있습니다.
+
 
 ### 3월 20일 강의내용
 
@@ -221,5 +299,90 @@ React는 컴포넌트 기반 아키텍처와 가상 DOM을 활용하여 성능�
 React는 배우기 쉽고 다양한 생태계를 갖춘 라이브러리로, 웹 애플리케이션 개발에서 필수적인 도구로 자리 잡았습니다. React를 효과적으로 활용하면 대규모 애플리케이션도 쉽게 관리하고 유지보수할 수 있습니다.
 
 
+### 3월 13일 강의내용  
 
+# VS Code에서 React 설치 및 Git 연동 가이드
+
+## 1. VS Code에서 React 개발 환경 설정하기
+
+### 1.1 VS Code 설치
+React 개발을 위해 **Visual Studio Code(VS Code)**를 설치해야 합니다. 아래 링크에서 다운로드 후 설치를 진행하세요.
+- [VS Code 다운로드](https://code.visualstudio.com/)
+
+설치가 완료되면 VS Code를 실행합니다.
+
+### 1.2 Node.js 및 npm 설치
+React는 **Node.js** 환경에서 실행되므로, 최신 버전의 Node.js를 설치해야 합니다.
+- [Node.js 다운로드](https://nodejs.org/)
+
+설치 후 터미널을 열어 버전을 확인합니다:
+```sh
+node -v  # Node.js 버전 확인
+npm -v   # npm 버전 확인
+```
+
+### 1.3 Create React App으로 React 프로젝트 생성
+
+Create React App(CRA)을 사용하면 손쉽게 React 프로젝트를 만들 수 있습니다.
+
+터미널에서 원하는 디렉토리로 이동 후 아래 명령어 실행:
+```sh
+npx create-react-app my-app
+cd my-app
+npm start
+```
+위 명령어를 실행하면 `http://localhost:3000`에서 React 애플리케이션이 실행됩니다.
+
+## 2. Git을 사용하여 프로젝트 관리하기
+
+### 2.1 Git 설치
+Git이 설치되지 않았다면 아래 사이트에서 다운로드 후 설치하세요.
+- [Git 다운로드](https://git-scm.com/)
+
+설치 후 버전 확인:
+```sh
+git --version
+```
+
+### 2.2 Git 초기화 및 GitHub 연동
+
+#### 1) Git 초기화
+프로젝트 폴더에서 Git을 초기화합니다:
+```sh
+git init
+```
+
+#### 2) `.gitignore` 파일 생성
+React 프로젝트에서 불필요한 파일을 Git에 포함하지 않도록 `.gitignore` 파일을 추가해야 합니다.
+기본적으로 `create-react-app`은 자동으로 `.gitignore` 파일을 생성합니다.
+
+#### 3) GitHub 저장소 생성 및 연결
+GitHub에 접속하여 새 저장소(repository)를 생성한 후, 터미널에서 다음 명령어를 실행하여 연결합니다.
+```sh
+git remote add origin https://github.com/사용자이름/저장소이름.git
+```
+
+#### 4) 프로젝트 커밋 및 푸시
+```sh
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git push -u origin main
+```
+위 명령어를 실행하면 프로젝트가 GitHub에 업로드됩니다.
+
+### 2.3 Git에서 변경 사항 반영
+#### 1) 변경 사항 확인
+```sh
+git status
+```
+#### 2) 변경 사항 커밋 및 푸시
+```sh
+git add .
+git commit -m "Updated project"
+git push origin main
+```
+
+## 3. 결론
+이제 VS Code에서 React 프로젝트를 생성하고, GitHub와 연동하여 관리할 수 있습니다. 이를 활용하여 체계적으로 React 애플리케이션을 개발하세요!
 
