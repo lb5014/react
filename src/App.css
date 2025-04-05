@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+.wrapper {
+  width: 25%;/* wrapper(container)• 영역의 width를 30%로 설정•*/ 
+  margin: auto;/* wrapper(container) 영역을 브라우저에서 가운데 정렬하기. 위해 au text-align: center; /* inline-block화•된 div들을· 텍스트• 처럼•center로•정렬*/
+}
+  .wrapper > div {
+  width: 50%; 
+  float: left;
+  }
+

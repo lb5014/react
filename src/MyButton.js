@@ -1,13 +1,14 @@
-function MyButton() {
-  const [count, setCount] = useState(0);
-
+export default function MyButton() {
   function handleClick() {
-    setCount(count + 1);
-  }
+  alert( 'You clicked me!');
 
-  return (
-    <button onClick={handleClick}>
-      Clicked {count} times
-    </button>
-  );
-}
+} 
+return (
+  <button onClick={handleClick}>
+  
+  I'm a button
+  
+  </button >
+  )
+  }
+  

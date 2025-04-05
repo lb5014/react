@@ -1,9 +1,105 @@
 # 202130230 지영준. 
 
-### 4월 3일 강의내용
+### 4월 3일 강의내용  
+## 이벤트에 응답하기
+1. component 내부에 event handler 함수를 선언하면 event에 응답할 수 있습니다.
+2. 0nClick={handleClick의 끝에 소괄호()가 없는 것을 주목하세요!
+3. 함수를 호출하지 않고 전달만 하면 됩니다.
+4. React는 사용자가 버튼을 클릭할 때 이벤트 핸들러를 호출 합니다.
+```jsx
+/*
+* onclick event
+*/
+function MyButton {
+  function handleClick {
+    alert('You clicked me!');
+
+｝
+return (
+    <button onClick=thandle(lick)>
+          I'm a button </button>
+)
+}
+```
+앞에서 실습한 MyButton component를 수정하고, 정상 출력되는지 확인해 봅니다.
+MyButton component를 App.js에서 분리하지 않았다면 App.js에서 수정해도 됩니다.
+<hr>
+
+## 화면 업데이트하기
+1. component가 특정 정보를 기억해 두었다가 표시하기를 원하는 경우가 있습니다.
+2. 예를 들어 버튼이 클릭된 횟수를 세고 싶을 수 있습니다.
+3. 이렇게 하려면 component에 state를 추가하면 됩니다.  
+```jsx 
+import { useState } from 'react';
+```  
+1. 먼저, React에서 usestate를 import합니다.
+2. 이 코드를 보면 usestate는 react 파일 안에 Named Exports로 선언되어 있는 여러 개의 component 중 하나는 것을 알 수 있습니다.
+3. 이제 component 내부에 state 변수를 선언할 수 있습니다.  
+```jsx 
+function MyButton) {
+const [count, setCountl = usestate(o);
+```  
+<hr>  
+
+## 화면 업데이트하기  
+
+1. usestate로부터 현재의 state를 저장할 수 있는 변수인 count와 이를 업데이트할 수 있 는 함수인 setcount를 얻을 수 있습니다.
+2. 이름은 자유롭게 지정할 수 있지만 [something, setSomething]으로 작성하는 것이 일반 적입니다.
+3. 즉, 변수 이름과 변수 이름 앞에 set을 붙인 업데이트 함수를 관용적으로 사용합니다.  
+<hr>
+
+``` jsx 
+function Button() {
+const [count, setCount] = useState(0);
+function handleClickO {
+setCount (count + 1);
+
+return (
+<button onClick=(handleClick}>
+Clicked {count) times </button>
+)
+}
+```  
+1. 버튼이 처음 표시될 때는 usestate()에 0을 전달했기 때문에 count가 0이 됩니다.
+2. state를 변경하고 싶다면 setCount()를 실행하고 새 값을 전달하세요.
+3. 이 버튼을 클릭하면 카운터가 증가합니다.  
+## Hook 사용하기
+1. use로 시작하는 함수를 Hook이라고 합니다.
+2. usestate는 React에서 제공하는 내장 Hook입니다.
+3. 다른 내정 Hook은 API 참고서에서 찾아볼 수 있습니다.
+4. 또한 기존의 것들을 조합하여 자신만의 Hook을 작성할 수도 있습니다. 사용자 Hook.
+    1.  Hook은 다른 함수보다 더 제한적입니다.
+  예를 들면 ...
+    2. component 또는 다른 Hook의 상단에서만 Hook을 호출할 수 있습니다.
+    3. 조건이나 반복문에서 usestate를 사용하고 싶다면 새 컴포넌트를 추출하여 그곳에 넣으 세요.
+<hr>
+
+## Hooks의 사용 규칙(Rules of Hooks)
+Hook은 React의 렌더링 및 상태 관리 메커니즘과 밀접하게 연결되어 있으며, 아래와 같은 규칙을 따라야 합니다.  
+1. 최상위에서만 호출해야 한다  
+* if, for, while 등의 블록 내부에서 Hooks를 호출하면 안 됩니다.
+* 함수의 조건문 내부에서 호출하면 실행 순서가 달라질 수 있기 때문입니다.
+<hr>
+
+## 왜 이런 제한이 필요한가?
+: React의 동작을 예측 가능하고, 안정성을 높이기 위해 필요한 규칙입니다.
+1. rendering 순서를 보장하기 위해
+    * 조건문이나 반복문 안에서 Hooks를 사용하면 매 rendering마다 Hook의 호출 순서가 달 라질 수 있기 때문에 React가 상태를 제대로 추적할 수 없습니다.
+2. 불필요한 사이드 이펙트 방지
+    * component가 여러 번 rendering될 때마다 동일한 순서로 Hook이 실행되어야 React가 의도한 동작을 수행할 수 있습니다.  
+
+## 왜 function형 컴포넌트에서만 Hook을 사용할까?
+* Class형 component는 lifecycLe 함수를 통해서 상태 관리를 했습니다.
+* 그런 이유 때문에 Class형 component는 유지보수가 어렵고 복잡해질 수 있었습니다.
+* React는 component의 상태 관리(lifecycle)와 로직을 더 간결하게 만들기 위해 Hooks를 도입 하게 됩니다.
+* 따라서 React 팀은 function형 component를 권장하고 있습니다.
+* Hook은 function형 component 전용으로 설계되었습니다.
+#### 이런 이유 때문에 function형 component에서만 Hook을 사용하는 것입니다. 
+<hr>
 
 
-### 3월 27일 강의내용
+
+### 3월 27일 강의내용  
 ## 개요
 
 React.js는 Facebook에서 개발한 오픈 소스 자바스크립트 라이브러리로, 사용자 인터페이스(UI)를 구축하는 데 사용됩니다. React는 빠르고 유연하며 확장성이 뛰어난 라이브러리로, 컴포넌트 기반 아키텍처를 통해 재사용성이 높은 코드를 작성할 수 있습니다.
