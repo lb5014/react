@@ -7,7 +7,7 @@
 3. 함수를 호출하지 않고 전달만 하면 됩니다.
 4. React는 사용자가 버튼을 클릭할 때 이벤트 핸들러를 호출 합니다.
 ```jsx
-/*
+/*ㅇ
 * onclick event
 */
 function MyButton {
@@ -95,7 +95,7 @@ Hook은 React의 렌더링 및 상태 관리 메커니즘과 밀접하게 연결
 * 따라서 React 팀은 function형 component를 권장하고 있습니다.
 * Hook은 function형 component 전용으로 설계되었습니다.
 #### 이런 이유 때문에 function형 component에서만 Hook을 사용하는 것입니다. 
-<hr>
+<hr>  
 
 
 
