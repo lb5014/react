@@ -1,5 +1,149 @@
 # 202130230 지영준. 
 
+### 4월 10일 강의내용
+
+## props를 통해 데이터 전달하기
+1. React의 component architecture를 사용해서 재사용할 수 있는 component를 만들어서 지저분하고 중복된 코드를 삭제합니다.  
+    * Board component를 만들고, Square component의 내용을 복사합니다.
+    * Square component의 button을 하나만 남기고 모두 삭제합니다.
+    * Board component의 button을 Square component로 교체합니다.
+    * App에서 호출하는 component를 Square에서 Board로 바꿔줍니다.
+    * 정상적으로 출력이 되는지 확인해 보세요.
+    * 여기까지 하면 component는 깔끔하게 정리 됐지만, 숫자 출력이 1만 나오게 됩니다.
+    * 이 문제를 해결하기 위해 props를 사용하여 각 사각형이 가져야 할 값을 부모
+    component (Board)에서 자식 component (Square)로 전달하겠습니다.
+    * component를 호출하는 쪽이 부모 component입니다.  
+
+<hr>
+
+
+* Square component를 value prop을 전달 받을 수 있도록 수정합니다.  
+``` jsx 
+function Square({ value })
+}
+return <button className="square">1</but ton>;
+```  
+* 이렇게 수정한다고 해서 변하는 것은 없습니다. 왜냐하면 return값은 1이 전달되기 때 문입니다.
+* 문서처럼 value를 문자열로 1과 교체해도 마찬가지 입니다.
+* 문자열 "vaLue"가 아닌 Javascript 변수가 렌더링 되어야 합니다.
+* JSX에서 "Javascript로 탈출" 하려면, 중괄호가 필요합니다. JSX에서 value 주위에 중 괄호를 추가합니다
+``` jsx 
+function Stuarelf
+value }
+{
+return <button className="square" > value }</button>;
+``` 
+하지만 Board로 부터 value prop이 전달되지 않았기 때문에 않아 아무 것도 표시되지 않습니다.  
+
+<hr>
+
+### 사용자와 상호작용하는 컴포넌트 만들기
+  *  다음으로 사각형 컴포넌트가 클릭 된 것을 "기억"하고 "X" 표시로 채워보겠습니다.
+  * 컴포넌트는 무언가 "기억"하기 위해 state를 사용합니다.
+  * React는 상태 기억을 위해 usestate라는 Hook을 제공합니다.
+  * Square의 현재 값을 state에 저장하고 Square가 클릭하면 값이 변경되도록 하겠습니다.
+1. 파일 상단에서 usestate를 import합니다.
+2. Square 컴포넌트에서 value prop을 제거합니다. 대신 usestate를 사용합니다.
+3. Square 컴포넌트의 시작 부분에 usestate를 호출하고, value라는 이름의 state 변수를 반환하도록 하세요.
+``` jsx
+import { useState ] from ' react';
+
+function Square() {
+const [value, setValue] = useState(null);
+
+function handleclick() {
+//..
+```  
+
+* 이제 Square가 클릭 되었을 때 X*를 표시하도록 변경하겠습니다.
+5. console. 10g("cLicked!"); 이벤트 핸들러를 setValue('X');로 변경하세요.
+``` jsx
+function Square() {
+const [value, setValue] = useState(null);
+I
+function handleClick() {
+setValue('X') ;
+}
+``` 
+
+* oncLick 핸들러에서 set 함수를 호출해서 button 이클릭 될 때마다 Square를 다시 렌 더링하도록 했습니다.
+* 업데이트 후 Square의 value는 'X'가 되므로, 앞으로 Board에서 "X"를 볼 수 있습니다.
+* Square를 클릭하면 X"가 표시됩니다
+
+### React Developer Tools
+1. React 개발자 도구를 사용하면 React 컴포넌트의 props와 state를 확인할 수 있습니다.
+2. CodeSandBox의 브라우저 구역 하단에서 React 개발자 도구 탭을 찾을 수 있습니다.
+? 찾을 수가 없음. ㅠㅠ
+* React 개발자 도구는 Chrome, Firefox, 그리고 Edge 브라우저의 확장 프로그램으로 사 용할 수 있습니다.
+  * chrome 웹 스토어에서 React Developer Tools을 설치 합니다.
+
+# 게임 완료하기
+
+이 문서는 리액트(React)를 활용한 간단한 게임(예: 틱택토)을 완성하는 데 필요한 주요 개념들을 다룹니다. 총 4단계로 구성되어 있으며, 각 단계는 게임의 핵심 기능 구현과 관련된 중요한 개념을 포함합니다.
+
+---
+
+## 1. State 끌어올리기 (Lifting State Up)
+
+React에서 여러 컴포넌트가 동일한 데이터를 필요로 할 때, 데이터를 공통 부모 컴포넌트로 끌어올려(state를 상위 컴포넌트로 이동) 상태를 공유하도록 합니다.
+
+### 예시
+- `Square` 컴포넌트에서 직접 상태를 관리하는 대신, `Board` 컴포넌트로 상태를 끌어올려 모든 `Square`가 같은 소스로부터 데이터를 받도록 합니다.
+- 이렇게 하면 `Square` 간의 상태 동기화가 쉬워지고, 게임의 흐름 제어가 중앙화됩니다.
+
+---
+
+## 2. 불변성이 왜 중요할까요? (Why Immutability Matters)
+
+React에서 상태를 직접 수정하는 대신 새로운 객체로 상태를 업데이트해야 합니다. 이를 **불변성(immutability)** 이라고 합니다.
+
+### 이점
+- **변경 감지**: 불변 객체는 이전 상태와 쉽게 비교할 수 있어 React가 효율적으로 렌더링을 결정할 수 있습니다.
+- **Undo/Redo 구현이 쉬움**: 이전 상태를 보존할 수 있기 때문에 히스토리를 관리하기에 적합합니다.
+- **디버깅 용이**: 상태 추적이 쉬워 버그를 찾기 쉽습니다.
+
+---
+
+## 3. 순서 정하기 (Sorting Moves)
+
+게임 진행 시 각 턴의 히스토리를 저장하고, 이를 사용자가 오름차순 또는 내림차순으로 정렬해 볼 수 있도록 합니다.
+
+### 구현 방법
+- 각 턴을 배열로 저장합니다. 예: `history = [{squares: [...]}, ...]`
+- 정렬 버튼을 추가하여 사용자가 턴 목록의 순서를 바꿀 수 있게 합니다.
+- 현재 선택된 턴을 강조 표시하여 UX를 향상시킵니다.
+
+---
+
+## 4. 승자 결정하기 (Declaring a Winner)
+
+게임의 상태를 확인하여 승자를 판단하는 로직을 구현합니다.
+
+### 로직 예시 (틱택토 기준)
+- 가능한 모든 승리 조건을 배열로 정의합니다.
+- 현재 게임판 상태에서 이 조건을 만족하는지를 검사합니다.
+- 승자가 결정되면 이를 화면에 표시하고, 더 이상 클릭 이벤트가 발생하지 않도록 처리합니다.
+
+```js
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let [a, b, c] of lines) {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
 ### 4월 3일 강의내용  
 ## 이벤트에 응답하기
 1. component 내부에 event handler 함수를 선언하면 event에 응답할 수 있습니다.
