@@ -1,7 +1,330 @@
 # 202130230 지영준. 
 
-### 4월 10일 강의내용
+### 4월 17일 강의내용  
+## Array.prototype.at()
+1. Array 인스턴스의 at() 메서드는 정숫값을 받아 해당 인덱스에 있는 항목을 반환하며, 양수와 음수를 사용할 수 있습니다. 음의 정수는 배열의 마지막 항목부터 거슬러 셉니다.  
+``` jsx 
+const array1 = [5, 12, 8, 130, 44];
 
+let index = 2;
+
+console.log(`An index of ${index} returns ${array1.at(index)}`);
+// Expected output: "An index of 2 returns 8"
+
+index = -2;
+
+console.log(`An index of ${index} returns ${array1.at(index)}`);
+// Expected output: "An index of -2 returns 130"
+```
+* 출력값  
+> "An index of 2 returns 8"  
+> "An index of -2 returns 130"  
+
+
+# 1. 📦 State 끌어올리기 (Lifting State Up) 추가설명
+
+React에서 여러 컴포넌트가 동일한 데이터를 필요로 할 때, 각 컴포넌트가 개별적으로 state를 가지면 데이터의 **일관성 유지**가 어렵습니다. 이럴 때 사용하는 기법이 바로 **상태 끌어올리기(Lifting State Up)** 입니다.
+
+---
+
+## ✅ 개념 설명
+
+- **상태 끌어올리기**란, 여러 컴포넌트에서 동일한 데이터가 필요할 때 해당 데이터를 이들의 **공통 부모 컴포넌트로 이동**시켜서 관리하는 것입니다.
+- 공통 부모 컴포넌트가 state를 가지며, 자식 컴포넌트는 props를 통해 데이터를 전달받고, 변경 요청은 콜백 함수로 부모에게 전달합니다.
+
+---
+
+## 🎯 왜 필요한가요?
+
+| 이유 | 설명 |
+|------|------|
+| 데이터 일관성 유지 | 여러 컴포넌트가 동일한 데이터를 사용 시, 서로 동기화된 상태 유지 가능 |
+| 코드 간결성 | 중복된 상태와 로직 제거 |
+| 상태 추적 용이 | 상태가 한 곳에 집중되므로 디버깅이 쉬움 |
+| 컴포넌트 재사용성 향상 | 자식 컴포넌트는 props만 받아 동작하므로 더 유연하게 재사용 가능 |
+
+---
+
+## 🧪 예시 코드: 온도 변환기
+
+섭씨(Celsius)와 화씨(Fahrenheit)를 입력하는 두 개의 컴포넌트를 동기화된 상태로 만들기
+
+### TemperatureInput 컴포넌트
+
+```jsx
+function TemperatureInput({ scale, temperature, onTemperatureChange }) {
+  const scaleNames = {
+    c: '섭씨',
+    f: '화씨'
+  };
+
+  return (
+    <fieldset>
+      <legend>{scaleNames[scale]} 온도를 입력하세요:</legend>
+      <input
+        value={temperature}
+        onChange={(e) => onTemperatureChange(e.target.value)}
+      />
+    </fieldset>
+  );
+}
+```
+## 2. Calculator (공통 부모) 컴포넌트
+```jsx
+function Calculator() {
+  const [temperature, setTemperature] = useState('');
+  const [scale, setScale] = useState('c');
+
+  const handleCelsiusChange = (temp) => {
+    setScale('c');
+    setTemperature(temp);
+  };
+
+  const handleFahrenheitChange = (temp) => {
+    setScale('f');
+    setTemperature(temp);
+  };
+
+  const toCelsius = (f) => ((f - 32) * 5) / 9;
+  const toFahrenheit = (c) => (c * 9) / 5 + 32;
+
+  const celsius = scale === 'f' ? toCelsius(temperature) : temperature;
+  const fahrenheit = scale === 'c' ? toFahrenheit(temperature) : temperature;
+
+  return (
+    <div>
+      <TemperatureInput
+        scale="c"
+        temperature={celsius}
+        onTemperatureChange={handleCelsiusChange}
+      />
+      <TemperatureInput
+        scale="f"
+        temperature={fahrenheit}
+        onTemperatureChange={handleFahrenheitChange}
+      />
+    </div>
+  );
+}
+```
+
+## 교대로 두기 - 1  
+• 현재까지 작성한 틱택토 게임에서 가장 큰 결함인 0"를 보드에 표시할 수 없다는 문제를 수정할 차례입니다.
+1. 첫 번째 선수가 두는 말을 X"로 설정합니다. 이제 Board 컴포넌트에 또 다른 state를 추가하 여 추적해 보겠습니다.
+# X와 0가 번갈아 한 번씩 두어야 하기 때문에 X가 두었는지 아닌지 현재의 상태를 보관하면 됩니다.
+```jsx
+
+즉, X의 차례면 true,
+0의 차례면 false 상태로 기억하면 됩니다.
+function Board() {
+const [xINext, seXIsNext] = useState(true) ;
+const [squares, setSquares] = useState(Array (9). fill(null));
+```
+
+2.  플레이어가 움직일 때마다 다음 플레이어를 결정하기 위해 불리언 값인 xIsNext가 반전되고 게 임의 state가 저장됩니다. Board의 handleCLick 함수를 업데이트하여 xIsNext의 값을 반전시 키세요
+```jsx
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9). fill(null));
+
+function handleClick(i) {
+  const nextSquares = squares.slice();
+  if (xIsNext) {
+  nextSquares [1] = "X";
+  } else {
+  nextSquares [i] = "0";
+  }
+  setSquares (nextSquares);
+  setXIsNext(!XIsNext);
+  }
+  return (
+  /...
+}
+```
+
+## 교대로 두기 - 2
+
+* 이제 다른 사각형을 클릭하면 정상적으로 X와 0가 번갈아 표시됩니다!
+* 하지만 다른 문제가 발생했습니다. 같은 사각형을 여러 번 클릭해 보세요.
+* 0가 X를 덮어씌웁니다! 이렇게 하면 게임이 좀 더 흥미로워질 수 있지만 지금은 원래의 규칙을 유지하겠습니다.
+* 지금은 X와 0로 사각형을 표시할 때 먼저 해당 사각형에 이미 X 또는 0값이 있는지 확인하고 있 지 않습니다.
+* 앞으로 돌아가서 이 문제를 해결하기 위해 사각형에 이미 X와 0가 있는지 확인하겠습니다.
+1. Square가 이미 채워져 있는 경우 Board의 state를 업데이트하기 전에 handLecLick 함수에서 조기에 return 하겠습니다
+```jsx
+function handleClick(i) {
+if (squares [1]) { 
+  return;
+}
+const nextSquares = squares slice();
+}
+```
+* 이제 빈 사각형에 X 또는 0만 추가할 수 있습니다!
+
+# return의 의미
+* 작성한 코드에는 return값이 없습니다.
+* JavaScript에서 return값이 없는 return;은 함수를 즉시 종료하라는 의미입니다.
+* 이때 값을 반환하지 않으면 자동으로 undefined를 반환합니다.
+* squares[1]가 이미 값이 있다면 (누군가 이미 둔 곳이라면), 그 자리에 다시 둘 수 없으니 아무 일도 하지 말고 함수를 끝내는 것입니다  
+
+## 승자 결정하기
+*  이제 어느 플레이어의 다음 차례인지 표시했으니, 게임의 승자가 결정되어 더 이상 차례를 만들 필요가 없을 때도 표시해야 합니다.
+* 이를 위해 9개의 사각형 배열을 가져와서 승자를 확인하고, 적절하게 'X', 0', 또는 nuLl을 반환하는 도우미 함수 calculateWinner를 추가하겠습니다.
+* calculatewinner 함수에 대해 너무 걱정하지 마세요. 이 함수는 React에서만 국한되는 함수가 아닙니다.
+* [중요] calculatewinner 함수를 Board의 앞에 정의하든 뒤에 정의하는 상관없습니다. 여기에선 컴포넌트를 편집할 때마다 편집기 상에서 스크롤 할 필요가 없도록 마지막에 배치하겠습니다.
+
+## 승자 결정하기 - 1
+1. 먼저 승리할 수 있는 경우의 자리를 2차원 배열로 선언합니다.
+2. 선언된 배열 Line과 Squares를 비교하기 위한 for문을 작성합니다.
+3. 비교를 위해 구조 분해 할당을 합니다
+```jsx
+export default function Board() {
+// ...
+function calculateWinner (squares) {
+const lines = [
+[0, 1, 2],
+[3, 4, 5],
+[6, 7, 8]
+[0, 3, 6],
+[1, 4, 7],
+[2, 5, 8],
+[0, 4, 8],
+[2, 4, 6]
+];
+for (let i = 0; i ‹ lines. length; i++) {
+const [a, b, c] - lines[i]; if (squares[a] && squares[a]
+=== squares [b] && squares[a] === squares[c]) {
+return squares [a];
+}
+return null;
+}
+```  
+
+# 구조 분해 할당 (Destructuring Assignment)
+* 비구조화 할당, 구조화 할당이라고도 번역되지만 구조 분해 할당을 많이 사용합니다.
+* 구화 분해 할당은 배열이나 객체의 구조를 해체하여 내부 값을 개별 변수에 쉽게 할당하는 방법 입니다.
+* 이를 통해 코드의 간결성과 가독성을 높일 수 있습니다.
+* map함수에서도 사용되는 아주 많이 사용하는 방법입니다  
+<hr>
+
+### 배열인 경우  
+```jsx
+const pairs={
+  [1,2],
+  [3,4],
+  [5,6]
+};
+
+pairs.map(([x,y]) => {
+  console.log('x: ${x}, y: ${y}');
+});
+```  
+### 객체인 경우
+
+```jsx
+const users = [
+{ id: 1, name: "Alice" },
+{id: 2, name: "Bob" }
+];
+
+users-map(({ id, name }) => {
+console.log('${id}: ${name}');
+});
+```
+• lines는 승리 할 수 있는 Squares의 index 번호입니다.
+• for문을 통해 lines의 길이 만큼 비교를 반복합니다.
+• 구조 분해 할당을 통해 Lines의 index를 a, b, C에 보관합니다.
+• Squares의 해당
+I index 값을 비교하여 3개가 모두 일치하면 값이 X인지 0인지를 return합니다.
+• 일치하는 것이 없으면 null을 return합니다
+```jsx
+function calculateWinner (squares) {
+const lines - [
+[0, 1, 2],
+[3, 4, 5],
+[6, 7, 8],
+[0, 3, 6],
+[1, 4, 7],
+[2, 5, 8],
+[0, 4, 8],
+[2, 4, 6］
+];
+for (let i = 0; 1 < lines. length; 1++) {
+  const [a, b, c) - lines[i];
+  if (squares[a) && squares[a) -=- squares[b] && squares[a) -== square[c])v{
+    return squares [a];
+  }
+}
+return null;
+}
+```
+### 승자 결정하기 - 1  
+4. Board 컴포넌트의 handleCLick 함수에서
+calculatewinner (Squares)를 호출하여 플레이어가
+이겼는지 확인하세요.  
+5. 이 검사는 사용자가 이미 X 또는 0가 있는 사각형을 클릭했는지를 확인하는 것과 동시에 수행할 수 있습니다.  
+6. 두 경우 모두 함수를 조기 반환하겠습니다. 함수를 즉시 종료한다는 의미 입니다.
+```jsx
+function handleClick(i) {
+if (squares[i] || calculateWinner (squares)) {
+return;
+}
+const nextSquares = squares slice();
+//...
+}
+```
+*  여기까지 작성하면 경기는 정상적으로 진행되지만, 경기 종료 알림 표시가 나오지 않습니다.  
+
+### 승자 결정하기 - 2
+7. 게임이 끝났을 때 플레이어에게 알리기 위해 "Winner: X” 또는 "Winner: 0”라고 표시하겠습니다.  
+8. 이렇게 하려면 Board 컴포넌트에 status 구역을 추가하면 됩니다.  
+9. 게임이 끝나면 status는 승자를 표시하고, 게임이 진행 중인 경우 다음 플레이어의 차례를 표시 합니다  
+
+```jsx
+export default function Board() {
+  //...
+const winner = calculateWinner (squares) ;
+let status;
+if (winner) {
+status = "Winner:" + winner;
+} else {
+status = "Next player: " + (xIsNext ? "X" : "0");
+}
+  return (
+    <>
+    <div className="status"> {status}</div>
+    <div className="board-row">
+      //...
+  )
+}
+```
+## 시간여행 추가하기
+* 마지막 연습으로 게임의 이전 동작으로 "시간을 거슬러 올라가는" 기능을 만들어 보겠습니다.  
+[플레이 히스토리 저장하기]  
+* Squares 배열을 직접 업데이트하면 시간 여행을 구현하기는 매우 어려울 것입니다.  
+* 하지만 우리는 sLiceO를 사용하여 플레이어가 클릭할 때마다 Squares 배열의 새 복사본을 만들 고 이를 불변으로 처리했습니다.  
+* 덕분에 squares 배열의 모든 과거 버전을 저장할 수 있고, 의미 발생한 플레이의 내용을 탐색할 수 있습니다  
+• 과거의 sauares 배열을 history라는 다른 배열에 저장하고, 이 배열을 새로운 * state 변수로 저장하겠습니다.  
+* history 배열은 첫 번째 플레이부터 마지막 플레이까지 모든 보드 state를 나타내며 다음과 같은 모양을 갖습니다
+```jsx
+[
+// Before first move
+[null, null, null, null, null, null, null, null, null],
+Il After first move
+[null, null, null, null, 'X', null, null, null, null],
+// After second move
+[null, null, null, null, 'X', null, null, null, '0'],
+// ...
+]
+```
+## 한번 더 state 끌어올리기
+* 이제 과거 플레이 목록을 표시하기 위해 새로운 최상위 컴포넌트 Game을 작성하세요.
+* 여기에 전체 게임 기록을 포함하는 history state를 배치하겠습니다.
+* history state를 Game 컴포넌트에 배치하면 자식 Board 컴포넌트에서 Squares state를 제거 할 수 있습니다.
+* Square 컴포넌트에서 Board 컴포넌트로 State를 "끌어올렸던" 것처럼, 이제 Board 컴포넌트에 서 최상위 Game 컴포넌트로 state를 끌어올릴 수 있습니다.
+* 이렇게 하면 Game 컴포넌트가 Board 컴포넌트의 데이터를 완전히 제어하고 Board의 history에 서 이전 순서를 렌더링하도록 지시할 수 있습니다.
+#### 이번 절은 단계가 많아서 도중에 오류가 나거나, WARNING이 많이 발생합니다.끝까지 작성하면 정상 동작합니다.
+
+### 4월 10일 강의내용  
 ## props를 통해 데이터 전달하기
 1. React의 component architecture를 사용해서 재사용할 수 있는 component를 만들어서 지저분하고 중복된 코드를 삭제합니다.  
     * Board component를 만들고, Square component의 내용을 복사합니다.
