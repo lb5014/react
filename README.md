@@ -1,5 +1,218 @@
 # 202130230 지영준. 
 
+### 4월 18일 강의내용
+## 한 번 더 state 끌어올리기
+1. 먼저 export default가 있는 Game 컴포넌트를 추가하세요.
+2. 마크업 안에 Board 컴포넌트를 렌더링하도록 하세요.
+3. export default 컴포넌트는 하나의 컴포넌트 파일 안에 하나만 존재해야 하므로 Board에서는 삭제합니다.
+4. 이것은 index.js 파일에서 Board 컴포넌트 대신 Game 컴포넌트를 최상위 컴포넌트로 사용하도록 지시합니다.
+
+5. Game 컴포넌트가 반환하는 내용에 추가한 div는 나중에 보드에 추가할 게임 정보를 위한 공간을 확보합니다.
+```jsx
+function Board() {
+//...
+}
+
+export default function Game() {
+return (
+<div className="game">
+<div className="game-board">
+<Board />
+</div>
+<div className="game-info">
+<ol> {/*TODO*/}</ol>
+</div>
+</div>
+);
+}
+```
+### 주의
+* 우리는 index가 아니고 App에서 불러오고 있습니다.
+* 최상위 컴포넌트이기 때문에 최상위에 선언합니다.
+* 최상위 컴포넌트와 파일이름은 일치 시키는 것이 좋습니다.
+
+6. 다음 플레이어와 플레이 기록을 추적하기 위해
+Game 컴포넌트에 몇 개의 state를 추가하세요.
+```jsx
+export default function Game ) {
+const [xINext, seXIsNext] = useState(true);
+const [history, setHistory] = useState([Array(9) .fill(null)]);
+// ...
+```
+7. 현재 플레이에 대한 square을 렌더링하려면 history에서 마지막 Squares의 배열을 읽어야 합 니다.
+8. 렌더링 중에 계산할 수 있는 충분한 정보가 이미 있으므로 usestate는 필요하지 않습니다.
+
+```jsx
+export default function Game () {
+const [xIsNext, setXIsNext] = useState(true) ;
+const [history, setHistory] = useState([Array(9).fill(null)]);
+const currentSquares
+}
+```
+9. 다음으로 Game 컴포넌트 안의 Board 컴포넌트가 게임을 업데이트할 때 호출할 handleplay 함 소를 만드세요.  
+10. XISNext, currentsquares, handleplay 를 Board 컴포넌트에 props로 전달하세요.  
+
+```jsx
+export default function Game() {
+const [xIsNext, setXIsNext] = useState (true) ;
+const [history, setHistory] = useState([Array(9).fill(null)]);
+const currentSquares = history[history.length - 1];
+function handlePlay(nextSquares) {
+/I TODO
+}
+return (
+‹div className="game">
+‹div className="game-board">
+‹Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} /›
+//...
+)
+}
+```  
+* Board 컴포넌트가 props에 의해 완전히 제어되도록 만들겠습니다.
+11. Board 컴포넌트가 xIsNext, squares, onPlay 함수를 props로 받을 수 있도록 변경합니다.
+- onPlay는 Board가 업데이트된 Squares를 배열로 호출할 수 있는 새로운 함수입니다.
+12. 다음으로 Board 함수에서 usestate를 호출하는 처음 두 줄을 제거하세요.
+```jsx
+function Board({ xIsNext, squares, onPlay }){
+function handleClick(1) {
+//..
+}
+//..
+}
+```
+13. 이제 Board 컴포넌트의 handLeClick에 있는 setSquares 및 setxIsNext 호출을 새로운 onPlay 함수에 대한 단일 호출로 대체함으로써 사용자가 사각형을 클릭할 때 Game 컴포넌트가 Board를 업데이트할 수 있습니다.
+
+```jsx
+if (xIsNext) {
+nextSquares [i] = "X";
+} else {
+nextSquares [i] = "0";
+}
+onPlay (nextSquares) ;
+```
+* Board 컴포넌트는 Game 컴포넌트가 전달한 props에 의해 완전히 제어됩니다.
+* 게임이 다시 작동하게 하려면 Game 컴포넌트에서 handleplay 함수를 구현해야 합니다.
+* handLepLay가 호출되면 무엇을 해야 할까요?  
+-> 이전의 Board는 업데이트된 setSquares를 호출했지만, 이제는 업데이트된 Squares 배열을 onPlay로 전달한다는 걸 기억하세요.
+* handlePlay 함수는 리렌더링을 트리거하기 위해 Game의 state를 업데이트해야 하지만, 더 이상 호출할 수 있는 setSquares 함수가 없습니다.
+대신 이 정보를 저장하기 위해 history state 변수를 사용하고 있습니다.
+* 업데이트된 squares 배열을 새 히스토리 항목으로 추가하여 history를 업데이트해야 하고, Board에서 했던 것처럼 xIsNext 값을 반전시켜야 합니다.
+```jsx
+export default function Game () {
+//...
+function handlePlay(nextSquares) {
+setHistory([...history, nextSquares]);
+setXIsNext(!xIsNext);
+}
+//...
+}
+```
+* 앞에서 [..history, nextSquares]는 history에 있는 모든 항목을 포함하는 새 배열을 만들 고 그 뒤에 nextSquares를 만듭니다.  
+ * ...history **전개 구문**을 사용하면 history 의 모든 항목 열거"로 읽을 수 있습니다.
+* 예를 들어, history가 [[nult,nult,null], ["x",nult,nuLt]]이고 nextSquares 가 ["X", nult, "0"]라면 새로운 [history, nextSquares] 배열은 [tnultnuLt,nuL], ["X",nult,null], ["X",nll,0]]가 될 것입니다.
+* 이 시점에서 state를 Game 컴포넌트로 옮겼으므로 리팩토링 전과 마찬가지로 UI가 완전히 작동 해야 합니다.
+  * 전개 연산자(spread operator) ...
+
+# ⏳ React 시간 여행 (Time Travel) 기능 구현
+
+React로 상태의 변경 이력을 추적하고, 이전 상태로 되돌아가거나 다시 앞으로 이동할 수 있는 “시간 여행(Time Travel)” 기능을 구현하는 방법을 설명합니다. 이 기능은 디버깅, 복잡한 상태 관리, 또는 사용자 편의성을 높이기 위한 다양한 UI에 사용됩니다.
+
+---
+
+## 🧠 시간 여행 기능이란?
+
+- **상태 변경 이력(history)** 을 배열로 저장해두고,
+- 사용자가 원하는 시점의 상태로 **되돌아가거나(Undo)** 또는 **되돌린 상태에서 다시 앞으로 가는(Redo)** 기능을 제공합니다.
+- 모든 상태 변경은 **새로운 상태 객체를 생성**하여, 불변성을 유지하며 관리합니다.
+
+---
+
+## 🔧 필요한 기능 요약
+
+| 기능 | 설명 |
+|------|------|
+| 상태 이력 저장 | 상태를 배열(history)로 저장 |
+| 현재 인덱스 추적 | 현재 상태가 이력 중 몇 번째인지 추적 |
+| 상태 업데이트 | 새로운 상태로 업데이트 시, 현재 인덱스 이후의 상태를 잘라냄 |
+| Undo | 현재 인덱스 -1로 이동 |
+| Redo | 현재 인덱스 +1로 이동 |
+| 단축키 지원 | Ctrl+Z (undo), Ctrl+Y 또는 Ctrl+Shift+Z (redo) |
+
+---
+
+## 🧱 전체 JSX 코드 예시
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function TimeTravelApp() {
+  // 초기 상태 정의
+  const initialState = { count: 0 };
+
+  // 상태 이력과 현재 인덱스
+  const [history, setHistory] = useState([initialState]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // 현재 상태는 history 배열의 currentIndex 번째
+  const currentState = history[currentIndex];
+
+  // 상태 업데이트 함수
+  const updateState = (newState) => {
+    const trimmedHistory = history.slice(0, currentIndex + 1);
+    const newHistory = [...trimmedHistory, newState];
+    setHistory(newHistory);
+    setCurrentIndex(newHistory.length - 1);
+  };
+
+  // 증가/감소 핸들러
+  const increment = () => updateState({ count: currentState.count + 1 });
+  const decrement = () => updateState({ count: currentState.count - 1 });
+
+  // Undo/Redo 핸들러
+  const undo = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const redo = () => {
+    if (currentIndex < history.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  // 단축키 이벤트 핸들링
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.key === 'z') {
+        e.preventDefault();
+        undo();
+      } else if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'Z')) {
+        e.preventDefault();
+        redo();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIndex, history]);
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h1>🕰️ 시간 여행 예제</h1>
+      <h2>Count: {currentState.count}</h2>
+      <button onClick={decrement}>-</button>
+      <button onClick={increment}>+</button>
+      <br /><br />
+      <button onClick={undo} disabled={currentIndex === 0}>Undo (Ctrl+Z)</button>
+      <button onClick={redo} disabled={currentIndex === history.length - 1}>Redo (Ctrl+Y)</button>
+      <p>현재 인덱스: {currentIndex}</p>
+    </div>
+  );
+}
+
+export default TimeTravelApp;
+```
 ### 4월 17일 강의내용  
 ## Array.prototype.at()
 1. Array 인스턴스의 at() 메서드는 정숫값을 받아 해당 인덱스에 있는 항목을 반환하며, 양수와 음수를 사용할 수 있습니다. 음의 정수는 배열의 마지막 항목부터 거슬러 셉니다.  
