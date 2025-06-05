@@ -1,4 +1,133 @@
 # 202130230 지영준. 
+## 6월 5일 강의내용  
+
+## 5-3. 기존 프로젝트에 React 추가
+[ 2단계: 페이지 어디에서든 React 컴포넌트 렌더링하기 ]
+* 이전 단계에서는, 메인 파일 최상단에 아래 코드를 넣었습니다.
+```jsx
+import { createRoot } from 'react-dom/client';
+
+// 기존 HTML 컨텐츠를 지웁니다.
+document.body.innerHTML - '<div id-"app"></div>';
+
+// 대신에 여러분이 작성한 React 컴포넌트를 렌더링합니다.
+const root = createRoot (document-getElementById('app')) ;
+root.render (<h1>Hello, world</h1>);
+```
+
+* 당연히 실제로는 기존 HTML 콘텐츠를 지우고 싶지 않을 겁니다!
+    * 그렇다면 의 코드를 삭제하세요.
+* 대신 React 컴포넌트를 HTML의 특정 위치에 렌더링하고 싶을 것입니다.
+* HTML 페이지를 열고(또는 이를 생성하는 서버 템플릿) HTML 태그에 고유한 id 어트리뷰트를 추 가하세요.
+
+## 5-3. 기존 프로젝트에 React 추가
+* 이렇게 하면 document.getElementById로 HTML 엘리먼트를 찾아 CreateRoot에 전달함으로써 해당 요소 내부에 React 컴포넌트를 렌더링할 수 있습니다.
+```jsx
+import { createRoot } from 'react-dom/client';
+
+function NavigationBar() {
+  // TOD0: 실제로 네비게이션 바를 구현합니다.
+  return <h1›Hello from React!</h1>;
+}
+
+const domNode = document-getElementById('navigation');
+const root - createRoot (domNode) ;
+root.render (‹NavigationBar />);
+```
+
+## 5-3. 기존 프로젝트에 React 추가
+* 기존에 존재하던 index.html의 원본 HTML 컨텐츠가 그대로 남아있는 것을 확인할 수 있습니다.
+* 하지만 이제는 <nav id="navigation"> 안에 개발자가 직접 작성한 NavigationBar React 컴 포넌트가 나타납니다.
+* 기존 HTML 페이지에서 React 컴포넌트가 렌더링 되는 것에 대하여 더 알아보려면
+createRoot
+사용법 문서를 읽어보세요. # 이 문서는 React 내부 문서 입니다.
+* 기존 프로젝트에서 React를 도입할 때, 일반적으로 작은 상호작용 컴포넌트(예시: 버튼)에서 시 작하여 점진적으로 "상위 구조로 확장하면서" 결국에는 전체 페이지가 React로 빌드될 때까지 이 과정을 반복하게 됩니다.
+* 이 지점에 도달한다면 React의 장점을 최대한 활용하기 위해 React 프레임워크로 마이그레이션 하는 것을 권장합니다.
+
+## 프로젝트에 도입하기 ( Installation )
+* React는 점진적으로 적용할 수 있도록 설계되었으며, 필요한 만큼 React를 사용할 수 있습니다.
+* React를 맛보기로 접해 보려고 하거나, 간단한 HTML 페이지에 약간의 상호작용을 추가하거나, 복잡한 React 기반의 앱을 시작하고자 하는 경우, 이 섹션을 참고하세요.
+* 이 장에서는
+- 새로운 React 프로젝트를 시작하는 방법
+- 기존 프로젝트에 React를 추가하는 방법
+- 에디터를 설정하는 방법
+- React 개발자 도구를 설치하는 방법
+
+## 06-1. 에디터 설정하기
+* VS Code는 현재 가장 많이 사용되는 에디터 중 하나입니다.
+* VS Code에 설치할 수 있는 익스텐션의 종류는 무수히 많으며, Github과 같은 외부 서비스와의 연동도 지원합니다.
+* 아래에 나열된 기능들은 대부분 익스텐션으로 존재하기 때문에 VS Code의 설정은 다양한 방식으 로 쉽게 변경할 수 있습니다.
+그 외에도 React 커뮤니티에서는" 다음과 같은 에디터들이 흔히 사용됩니다.
+* webstorm은 JavaScript에 특화되어 설계된 통합 개발 환경입니다.
+* Sublime Text는 JSX와 TypeScript를 지원하며 문법 강조 및 자동 완성 기능이 내장되어 있습 니다.
+* Vim은 모든 종류의 텍스트를 매우 효율적으로 생성하고 변경할 수 있도록 설계된 텍스트 편집
+
+### [ 에디터 기능 추천 ]
+이러한 기능들이 기본으로 설정된 에디터들도 있지만, 별도의 익스텐션 추가가 필요한 경우도 존재합 니다. 현재 사용 중인 에디터에서 어떠한 기능을 지원하는지 한번 확인해 보세요!
+1. Linting
+* 코드 린터는 코드를 작성하는 동안 실시간으로 문제를 찾아 줌으로써 빠른 문제해결이 가능하도록 도와줍니다.
+* ESLint는 많이 사용되고 JavaScript를 위한 오픈소스 린터입니다.
+- React를 위한 추천 설정과 함께 ESLint 설치하기 (사전에 Node가 설치되어 있어야 합니다)
+- VS Code의 ESLint를 공식 익스텐션과 통합하기
+* 프로젝트의 모든 eslint-plugin-react-hooks 규칙을 활성화했는지 확인하세요. 이 규칙은 필 수적이며 가장 심각한 버그를 조기에 발견합니다.
+* 권장되는 eslint-config-react-app 프리셋에는 이미 이 규칙이 포함되어 있습니다.
+
+## 06-1. 에디터 설정하기
+2. Formatting
+* 다른 개발자들과 협업할 때 가장 피하고 싶은 것은 탭 vs 공백에 대한 논쟁일 것입니다.
+* 다행히
+Prettier를 사용하면 직접 지정해 놓은 규칙들에 부합하도록 코드의 형식을 깔끔하게 정
+리할 수 있습니다.
+* Prettier를 실행하면 모든 탭은 공백으로 전환될 뿐만 아니라 들여쓰기, 따옴표 형식과 같은 요 소들이 전부 설정에 부합하도록 수정될 것입니다.
+* 파일을 저장할 때마다 Prettier가 자동 실행되어 이러한 작업들을 수행해 주는 것이 가장 이상 적인 설정입니다.
+* 다음과 같은 단계를 통해 VS Code의 Prettier 익스텐션을 설치할 수 있습니다.
+1. VS Code 실행하기
+2. 퀵오픈 사용하기 (CtrL/Cmd+P 누르기)
+3. ext install esbenp.prettier-vscode라고 입력하기
+
+#### 저장 시점에 포매팅하기
+: 저장할 때마다 코드가 포매팅 되는 것이 가장 이상적일 것입니다. 이러한 설정은 VS Code에 자체 적으로 내장되어 있습니다!
+1. VS Code에서 CTRL/CMD + SHIFT + P 누르기
+2. "settings"라고 입력하기
+3. 엔터 누르기
+4. 검색 창에서 format on save”라고 입력하기
+5. "format on save" 옵션이 제대로 체크되었는지 확인하세요!
+* 만약 ESLint 프리셋에 포매팅 규칙이 있는 경우 Prettier와 충돌을 일으킬 수도 있습니다.
+* ESLint가 오직 논리적 실수를 잡는 데만 사용되도록 esLint-config-prettier를 사용하여
+ESLint 프리셋의 모든 포매팅 규칙을 비활성화하는 것을 권장합니다.
+* PulL request가 merge 되기 전에 파일 형식이 지정되도록 하려면 지속적인 통합을 위해
+prettier --check를 사용하세요.  
+
+* TypeScript는 JavaScript 코드 베이스에 타입 정의를 추가하는 데 널리 사용되는 방법입니다.
+* 기본적으로 Typescript는 JSX를 지원하며, Qtypes/react 및 etypes/react-dom을 추가하면 완전한 React Web 지원을 받을 수 있습니다.
+
+( 학습 내용 )
+* React 컴포넌트가 있는 Typescript
+* Hooks 타이핑 예시
+* atypes/react의 일반적인 타입
+* 추가 학습 위
+
+### [ 기존 React 프로젝트에 Typescript 추가하기 ]
+* 최신 버전의 React 타입 정의를 설치합니다.
+npm install @types/react @types/react-dom
+* 다음 컴파일러 옵션을 tsconfig.json에 설정해야 합니다.
+1. dom은 반드시 1ib에 포함되어야 합니다.
+    * 주의: LIb 옵션이 지정되지 않으면, 기본적으로 dom이 포함됩니다.
+2. isx를 유효한 옵션 중 하나로 설정해야 합니다. 대부분의 애플리케이션에서는 preserve로
+충분합니다. 라이브러리를 게시하는 경우 어떤 값을 선택해야 하는지 1SX 설명서를 참조하세요.
+
+## 1. GitHub
+Pages 기본 저장소란?
+GitHub Pages를 운영하려면 먼저 GitHub Pages 저장소를 생성해야 합니다.
+* 생성 방법은 일반 저장소 생성과 동일하지만, 저장소 이름은 도메인 형태로 해야 합니다.
+* 또한 최상위 도메인 부분은 com이 아니라 .i0로 해야 합니다.
+‹My GitHub ID>.github.io
+* GitHub에서 직접 저장소를 만들었다면 cLone해서 LocaL에서 작업하고 push합니다.
+* 처음부터 저장소를 10cal에 만들었다면 그대로 push합니다. (추천)
+이 저장소는 GitHub에서 정적 호스팅을 하기 위해서는 반드시 필요한 저장소입니다.
+* 이후 다른 이름의 저장소도 페이지로 사용할 수 있습니다. 단, 페이지로 사용할 저장소가 있다면 설정에서 페이지를 활성화해야 합니다.
+
+
 
 ## 5월 29일 강의 내용
 
